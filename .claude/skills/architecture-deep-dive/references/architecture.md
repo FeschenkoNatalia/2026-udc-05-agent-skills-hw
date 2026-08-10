@@ -56,8 +56,8 @@ Three facts follow from those lines:
   throws while the module graph is loading, so the import of one bad widget takes
   down the entire bundle rather than one feature.
 - **`create` fails loudly and helpfully** — `Unknown widget "nope". Registered:
-  badge, spinner`. Confirmed by running the built bundle. When an agent reports
-  that error, the list in it is the real registry state, not a guess.
+  badge, spinner, alert`. Confirmed by running the built bundle. When an agent
+  reports that error, the list in it is the real registry state, not a guess.
 
 ### Registration is import-time
 
@@ -66,15 +66,17 @@ library:
 
 1. `app/src/index.ts` re-exports from `./widgets/index.js`.
 2. `app/src/widgets/index.ts` runs its side-effect imports — `import
-   "./badge/badge.js";`, `import "./spinner/spinner.js";` — with no bindings,
-   because the import exists only to execute the module.
+   "./badge/badge.js";`, `import "./spinner/spinner.js";`, `import
+   "./alert/alert.js";` — with no bindings, because the import exists only to
+   execute the module.
 3. Each widget module body runs top to bottom, ending in `register("badge",
    createBadge)`.
-4. The `Map` is now populated; `create()` and `listWidgets()` work.
+4. The `Map` is now populated in import order; `listWidgets()` returns
+   `["badge", "spinner", "alert"]`, and `create()` works for those three.
 
 The failure mode this creates is the defining hazard of the design: a widget with
 a correct factory, green tests, and no line in `widgets/index.ts` **does not
-exist at runtime**. Step 3 never runs for it. `create("alert")` throws
+exist at runtime**. Step 3 never runs for it. `create("tooltip")` throws
 `Unknown widget`, and nothing in `npm test` or `npm run typecheck` notices,
 because both operate on files rather than on the assembled graph. Only the built
 bundle's `listWidgets()` reveals it.

@@ -6,7 +6,7 @@
 // Usage — any cwd, and either skill copy (.agents/skills/… or the
 // .claude/skills/ mirror); paths are resolved from this file, not the cwd:
 //   node <skill-dir>/scripts/measure-bundle.mjs
-//   node <skill-dir>/scripts/measure-bundle.mjs --baseline=564  # delta vs. a previous run
+//   node <skill-dir>/scripts/measure-bundle.mjs --baseline=937  # delta vs. a previous run
 //   node <skill-dir>/scripts/measure-bundle.mjs --json          # machine-readable
 //
 // Writes nothing itself; the only file touched is app/dist/bundle.js, written

@@ -49,7 +49,8 @@ The bundle check is the one that matters: tests and `tsc` both stay green if the
 the bundle prints `[ 'badge' ]` in that case. No lint step exists in this project.
 
 > **Numbers are as of this run** (`badge` + `spinner`). Task D later added
-> `alert`, so the tree now reports 3 files / 7 tests, a 662 B bundle, and
+> `alert`, and a later pass introduced HTML escaping, so the tree now
+> reports 4 files / 17 tests, a 937 B bundle, and
 > `[ 'badge', 'spinner', 'alert' ]`. Left unchanged on purpose — this document
 > records what the run saw, not the current state.
 

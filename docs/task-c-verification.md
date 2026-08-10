@@ -12,13 +12,13 @@ skill's `scripts/` directory — both mirrored into `.claude/skills/`.
 
 Run by the participant in PowerShell, from the repo root:
 
-```
+```bash
 node .agents/skills/analyzing-bundle-size/scripts/measure-bundle.mjs
 ```
 
 <a id="the-report"></a>
 
-```
+```text
 Bundle report — app/dist/bundle.js
 
   raw         564 B
@@ -33,8 +33,9 @@ produced this report verbatim — `--baseline` adds one line, nothing else varie
 so it is shown once.
 
 > **Numbers are as of this run** (`badge` + `spinner`). Task D later added
-> `alert`; re-running the same script today prints 662 B raw / 380 B gzipped /
-> 3 widgets. Every `--baseline` and failure-mode result below is unaffected —
+> `alert`, and a later pass introduced HTML escaping; re-running the same
+> script today prints 937 B raw / 505 B gzipped / 3 widgets. Every `--baseline`
+> and failure-mode result below is unaffected —
 > they test the script's behaviour, not one particular size. Left as recorded,
 > since the point of this document is that the number came from a real run.
 
@@ -83,7 +84,7 @@ back if `npm run build` actually ran.
 Breaking the build is the sharper test. `app/src/index.ts` was temporarily
 replaced with invalid syntax **while a valid 564 B bundle sat in `app/dist/`**:
 
-```
+```text
 X [ERROR] Expected "}" but found "from"
     src/index.ts:1:29:
 measure-bundle: `npm run build` failed — fix the build before trusting any size number

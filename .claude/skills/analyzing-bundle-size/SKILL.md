@@ -34,14 +34,14 @@ It runs `npm run build` in `app/`, reads `app/dist/bundle.js` off disk, and
 reports raw bytes, gzipped bytes, the bundle's exports, and which widgets are
 actually registered:
 
-```
+```text
 Bundle report — app/dist/bundle.js
 
-  raw         564 B
-  gzipped     346 B
+  raw         937 B
+  gzipped     505 B
   exports     create, listWidgets
-  widgets     2  (badge, spinner)
-  per widget  ~282 B raw (average)
+  widgets     3  (badge, spinner, alert)
+  per widget  ~312 B raw (average)
 ```
 
 Flags: `--baseline=<bytes>` prints the delta against a previous run,
@@ -55,7 +55,7 @@ stored baseline, so a number you didn't capture is gone:
 ```bash
 node <this-skill>/scripts/measure-bundle.mjs              # note `raw`
 # ...make the change...
-node <this-skill>/scripts/measure-bundle.mjs --baseline=564
+node <this-skill>/scripts/measure-bundle.mjs --baseline=937
 ```
 
 ### Reading the result

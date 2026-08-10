@@ -44,9 +44,10 @@ so consumers cannot register from outside), and both widgets really ship. Neithe
 not on the assembled module graph.
 
 > **Numbers are as of this run** (`badge` + `spinner`). Task D later added
-> `alert`, so the bundle is now 662 B and `listWidgets()` returns
-> `[ 'badge', 'spinner', 'alert' ]`. The exported surface is unchanged. Left as
-> recorded — this document reports what the run saw.
+> `alert`, and a later pass introduced HTML escaping, so the bundle is now
+> 937 B and `listWidgets()` returns `[ 'badge', 'spinner', 'alert' ]`. The
+> exported surface is unchanged. Left as recorded — this document reports what
+> the run saw.
 
 ## Drift check
 

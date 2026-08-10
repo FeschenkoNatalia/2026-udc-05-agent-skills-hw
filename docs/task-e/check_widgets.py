@@ -56,9 +56,15 @@ def main() -> int:
 
     failures = []
 
-    for name in sorted(EXPECTED_WIDGETS):
-        if name not in registered:
-            failures.append(f"{name!r} missing from listWidgets()")
+    # Compare whole names, not substrings — a widget called "alert-banner" must
+    # not satisfy the check for "alert". The harness prints "registered: a, b, c".
+    _, _, names_text = registered.partition(":")
+    registered_names = {n.strip() for n in names_text.split(",") if n.strip()}
+
+    failures.extend(
+        f"{name!r} missing from listWidgets()"
+        for name in sorted(EXPECTED_WIDGETS - registered_names)
+    )
 
     # Every widget factory returns markup, so an empty box means the string
     # arrived but rendered to nothing.

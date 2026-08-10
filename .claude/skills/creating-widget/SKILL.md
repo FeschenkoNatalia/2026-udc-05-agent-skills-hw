@@ -73,6 +73,7 @@ grep -rn 'register("' app/src/widgets/
 ### 1. Write the factory — `app/src/widgets/<name>/<name>.ts`
 
 ```ts
+import { escapeHtml } from "../../core/escape-html.js";
 import { register, type WidgetProps } from "../../core/registry.js";
 
 export interface AlertProps extends WidgetProps {
@@ -81,8 +82,9 @@ export interface AlertProps extends WidgetProps {
 }
 
 export function createAlert(props: AlertProps): string {
-  const tone = props.tone ?? "info";
-  return `<div class="alert alert--${tone}">${props.message}</div>`;
+  // Union props are narrowed at runtime, not just in types.
+  const tone = props.tone === "warn" || props.tone === "error" ? props.tone : "info";
+  return `<div class="alert alert--${tone}">${escapeHtml(props.message)}</div>`;
 }
 
 register("alert", createAlert);
@@ -116,9 +118,15 @@ register("alert", createAlert);
 - **Build the markup by hand.** Requests like "a spinner" or "a date picker" are
   the ones that tempt an `npm install`; this library ships no dependencies, and
   animation or styling belongs in the consuming app's CSS.
-- **Don't add HTML escaping.** The seeded widgets interpolate props straight into
-  the string. If yours genuinely needs escaping, raise it — otherwise this
-  becomes the one file with its own convention.
+- **Escape every prop you interpolate**, with `escapeHtml` from
+  `app/src/core/escape-html.js` — never `${props.something}` raw. Widgets return
+  HTML that consumers assign to `innerHTML`, and `create()` takes
+  `Record<string, unknown>`, so a JS caller reaches your factory with any value.
+  Unescaped, `message: '<img src=x onerror=...>'` executes.
+- **Narrow union props at runtime too** — compare against the literals
+  (`props.tone === "warn" || props.tone === "error" ? props.tone : "info"`)
+  rather than `props.tone ?? "info"`. Types don't survive the trip through
+  `create()`, and an attribute-valued prop can otherwise close the attribute.
 
 ### 2. Make it reachable — `app/src/widgets/index.ts`
 
@@ -212,3 +220,13 @@ cd app && npm run build && node -e "import('./dist/bundle.js').then(m => console
 Prints `[ 'badge', 'alert' ]` when the wiring is right, `[ 'badge' ]` when it
 isn't. Nothing can fake this one — it runs the same module graph the published
 bundle has.
+
+Last, check that no prop reaches the markup unescaped. Neither `npm test` nor
+`tsc` catches this — a widget that interpolates raw props is green on both:
+
+```bash
+grep -nE '\$\{props\.' app/src/widgets/alert/alert.ts   # every hit must be inside escapeHtml(...)
+```
+
+The only interpolations allowed bare are values you narrowed to literals
+yourself, such as `tone` or `size`.

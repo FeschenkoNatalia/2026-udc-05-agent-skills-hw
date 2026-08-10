@@ -49,3 +49,11 @@ codebase alone could not supply them.
 **Verdict:** keep the skill for its checks, not its pattern — the pattern is
 already in the repo. Its value would grow on a repo with no example widget to
 copy.
+
+> **Later change to `alert.ts`.** After this comparison, review flagged that
+> `props.message` was interpolated into HTML unescaped, so all three widgets were
+> hardened with a shared `escapeHtml` helper and runtime `tone`/`size` narrowing.
+> That is a change to the artifact both runs produced, not to the comparison:
+> neither A nor B escaped anything, so the row-by-row result above stands as
+> recorded. Worth noting that **the skill did not catch it either** — its
+> `## Verify` section checks wiring and registration, not output safety.

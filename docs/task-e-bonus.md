@@ -4,7 +4,7 @@
 [github.com/anthropics/skills](https://github.com/anthropics/skills)
 (`skills/webapp-testing`), at commit **`b9e19e6`** (2026-04-20) — vendored to
 `.agents/skills/webapp-testing/`, mirrored to `.claude/skills/webapp-testing/`.
-5 files: `SKILL.md`, `scripts/with_server.py`, 3 `examples/*.py`, `LICENSE.txt`.
+6 files: `SKILL.md`, `scripts/with_server.py`, 3 `examples/*.py`, `LICENSE.txt`.
 
 ### License
 
