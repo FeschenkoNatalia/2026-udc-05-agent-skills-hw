@@ -103,9 +103,11 @@ site:
 - **Not checked:** anything passed through `create`. Its signature is
   `create(name: string, props: WidgetProps = {})` — `Record<string, unknown>`
   accepts every object. `create("badge", { labl: "typo" })` compiles cleanly and
-  renders `<span class="badge badge--info">undefined</span>`. The widget name is
-  a bare `string` too, so a misspelled ID is a runtime throw, never a compile
-  error.
+  renders `<span class="badge badge--info"></span>` — an empty badge, verified
+  against the built bundle. The missing prop is silently `undefined`, and
+  `escapeHtml` coerces it to `""`, so the typo produces no error and no visible
+  text. The widget name is a bare `string` too, so a misspelled ID is a runtime
+  throw, never a compile error.
 
 The practical consequence: tests must import the factory directly
 (`import { createBadge } from "./badge.js"`) to get any type checking at all. A

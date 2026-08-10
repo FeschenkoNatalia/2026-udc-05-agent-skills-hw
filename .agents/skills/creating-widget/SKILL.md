@@ -153,9 +153,10 @@ Colocated, modelled on `app/src/widgets/badge/badge.test.ts`. Import the factory
 directly, and not only for tidiness: `create` is declared
 `create(name: string, props: WidgetProps = {})`, so it accepts any object at all.
 `create("alert", { messge: "typo" })` typechecks clean and renders
-`<div class="alert alert--info">undefined</div>`. Your props interface guards the
-factory, not the caller — so a test routed through `create()` throws away the
-only type checking this design gives you.
+`<div class="alert alert--info"></div>` — an empty alert, since the missing prop
+is `undefined` and `escapeHtml` coerces it to `""`. Nothing errors, and nothing
+shows. Your props interface guards the factory, not the caller — so a test routed
+through `create()` throws away the only type checking this design gives you.
 
 ```ts
 import { describe, expect, it } from "vitest";
