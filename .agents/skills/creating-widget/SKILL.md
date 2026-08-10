@@ -225,8 +225,16 @@ Last, check that no prop reaches the markup unescaped. Neither `npm test` nor
 `tsc` catches this — a widget that interpolates raw props is green on both:
 
 ```bash
-grep -nE '\$\{props\.' app/src/widgets/alert/alert.ts   # every hit must be inside escapeHtml(...)
+grep -nE '\$\{[^}]*\}' app/src/widgets/alert/alert.ts
 ```
 
-The only interpolations allowed bare are values you narrowed to literals
-yourself, such as `tone` or `size`.
+Every hit must be either `escapeHtml(...)` or a value **you** narrowed to
+literals in this file, such as `tone` or `size`. The pattern deliberately matches
+*all* interpolations, not just `${props.…}`: a destructured `const { label } =
+props` produces a bare `${label}` that is exactly as unsafe, and a `props.`-only
+pattern would report the file clean.
+
+One limit worth knowing: this reads a template literal. Markup assembled by
+concatenation (`"<span>" + label + "</span>"`) produces no `${…}` at all, so the
+grep stays silent on it. Keep the single-template-literal shape every seeded
+widget uses; if you ever concatenate, check each operand by hand.
