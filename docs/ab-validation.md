@@ -55,5 +55,6 @@ copy.
 > hardened with a shared `escapeHtml` helper and runtime `tone`/`size` narrowing.
 > That is a change to the artifact both runs produced, not to the comparison:
 > neither A nor B escaped anything, so the row-by-row result above stands as
-> recorded. Worth noting that **the skill did not catch it either** — its
-> `## Verify` section checks wiring and registration, not output safety.
+> recorded. Worth noting that **the skill did not catch it either** — the version
+> run in this comparison checked wiring and registration in `## Verify`, not
+> output safety. The current skill has since gained an output-safety check there.
