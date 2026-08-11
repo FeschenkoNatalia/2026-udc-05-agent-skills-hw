@@ -62,6 +62,9 @@
     caption.className = "case-name";
     caption.textContent = `create("${name}", ${JSON.stringify(props)})`;
     const slot = document.createElement("div");
+    // Marks the create() output itself, so a check can tell "the factory
+    // returned markup" apart from "the harness built a box around nothing".
+    slot.className = "widget-output";
     slot.innerHTML = create(name, props);
     box.append(caption, slot);
     host.append(box);

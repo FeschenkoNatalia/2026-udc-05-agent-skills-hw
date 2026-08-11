@@ -96,7 +96,7 @@ register("alert", createAlert);
   doesn't match `WidgetFactory`. The error points the wrong way — it reads as if
   the *caller* forgot a prop:
 
-  ```
+  ```text
   error TS2345: Argument of type '(props: AlertProps) => string' is not
   assignable to parameter of type 'WidgetFactory<WidgetProps>'.
     Property 'message' is missing in type 'WidgetProps' but required in

@@ -35,7 +35,7 @@ python .agents/skills/webapp-testing/scripts/with_server.py \
     -- python docs/task-e/check_widgets.py
 ```
 
-```
+```text
 cases : 7 -> badge, badge, alert, alert, spinner, spinner, tooltip-missing
 error : [harness] expected throw: Unknown widget "tooltip". Registered: badge, spinner, alert
 OK: all widgets rendered in a real browser; registry threw as expected
@@ -100,7 +100,7 @@ run proves the explicit paths render, not the defaults.
 **Not adapted:** `SKILL.md`'s frontmatter `description` is the **only** change
 to the vendored skill — its body, `with_server.py`, and the examples are
 untouched upstream content, and the modification notice in `SKILL.md` says so.
-No file in `app/` was touched; `npm test` is still 7/7 green.
+No file in `app/` was touched; `npm test` is still 17/17 green.
 
 ## Reproduce
 
@@ -127,4 +127,4 @@ That's the lesson for my own three skills. A skill's body travels; its
 lands in and on what other skills sit beside it — neither of which the author
 can know. And every skill smuggles in assumptions about its host project; the
 good ones just carry fewer, and say them out loud. The payoff was real evidence:
-the seeded widgets render, which 7 green string tests never actually showed.
+the seeded widgets render, which 17 green string tests never actually showed.

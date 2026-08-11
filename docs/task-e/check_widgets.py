@@ -39,9 +39,22 @@ def main() -> int:
 
         registered = page.locator("#registered").inner_text()
         cases = page.locator(".case")
-        rendered = [
-            cases.nth(i).get_attribute("data-widget") for i in range(cases.count())
-        ]
+        rendered = []
+        # `data-widget` is set before create() runs, so the box proves nothing on
+        # its own — read the .widget-output slot to see what the factory returned.
+        outputs = []
+        for i in range(cases.count()):
+            box = cases.nth(i)
+            name = box.get_attribute("data-widget")
+            slot = box.locator(".widget-output")
+            rendered.append(name)
+            outputs.append(
+                {
+                    "name": name,
+                    "html": slot.inner_html().strip() if slot.count() else "",
+                    "root_ok": box.locator(f".widget-output > .{name}").count() > 0,
+                }
+            )
 
         page.screenshot(path=str(SHOT), full_page=True)
         browser.close()
@@ -66,10 +79,19 @@ def main() -> int:
         for name in sorted(EXPECTED_WIDGETS - registered_names)
     )
 
-    # Every widget factory returns markup, so an empty box means the string
-    # arrived but rendered to nothing.
     if len(rendered) != 7:
         failures.append(f"expected 7 cases, rendered {len(rendered)}")
+
+    # Every widget factory returns markup whose root element carries the widget's
+    # own name as a class. An empty slot means create() returned a string that
+    # rendered to nothing — which a count of .case boxes would happily pass.
+    for out in outputs:
+        if out["name"] == "tooltip-missing":
+            continue  # the throw path renders harness markup, not a widget
+        if not out["html"]:
+            failures.append(f"{out['name']!r} rendered an empty box")
+        elif not out["root_ok"]:
+            failures.append(f"{out['name']!r} markup has no .{out['name']} root element")
 
     if "tooltip-missing" not in rendered:
         failures.append("unregistered-widget case did not render")
