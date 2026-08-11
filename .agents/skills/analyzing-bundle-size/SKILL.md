@@ -43,5 +43,6 @@ just labels it `app/dist/bundle.js` either way.
 ## Scripts
 
 - `scripts/measure-bundle.mjs` — runs the project's own `npm run build` in
-  `app/`, then measures `app/dist/bundle.js`. Writes nothing itself, makes no
+  `app/`, then measures `app/dist/bundle.js`. It writes no report of its own,
+  but the build it runs does create or overwrite `app/dist/bundle.js`. Makes no
   network calls, and needs `npm install` to have been run in `app/`.
