@@ -35,7 +35,10 @@ failure; don't fall back to a guess.
 
 ## Verify
 
-`ls -l app/dist/bundle.js` reports the same byte count as the script's `raw`.
+**From the repo root**, `ls -l app/dist/bundle.js` reports the same byte count
+as the script's `raw`. Unlike the command above, this path is relative to the
+cwd — the script resolves `app/` by walking up from its own file, the report
+just labels it `app/dist/bundle.js` either way.
 
 ## Scripts
 

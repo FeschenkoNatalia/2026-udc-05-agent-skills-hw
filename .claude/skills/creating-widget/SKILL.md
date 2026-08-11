@@ -107,8 +107,10 @@ register("alert", createAlert);
   alias also compiles, but then this widget is the odd one out; stay with the
   interface.
 - **Purity is what the tests rely on.** That single `register(...)` call is the
-  file's only side effect, which is what lets tests assert exact strings and the
-  bundler tree-shake predictably.
+  file's only side effect, which is what lets tests assert exact strings. It buys
+  nothing from the bundler: the call sits at module scope, so the side-effect
+  import in `widgets/index.ts` is load-bearing and every registered widget ships
+  whether or not anyone calls it.
 - **`register(...)` sits at module scope, at the bottom** — not inside a function,
   since it has to run on import.
 - **Imports end in `.js`** even though the source is `.ts`. `moduleResolution:
@@ -132,6 +134,7 @@ register("alert", createAlert);
 
 ```ts
 import "./badge/badge.js";
+import "./spinner/spinner.js";
 import "./alert/alert.js";
 
 export { listWidgets, create } from "../core/registry.js";
