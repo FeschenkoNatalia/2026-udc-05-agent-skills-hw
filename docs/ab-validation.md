@@ -16,8 +16,16 @@ Both runs produced the same three files and left `core/registry.ts` untouched:
 `widgets/alert/alert.ts` (factory + module-level `register("alert", createAlert)`),
 `widgets/alert/alert.test.ts` (2 colocated cases), and the side-effect import in
 `widgets/index.ts`. Both: `AlertProps extends WidgetProps`, named exports, no
-`any`, `props.tone ?? "info"` mirroring `createBadge`. Both green on `npm test`
-(3 files / 7 tests) and `npm run typecheck`.
+`any`, `props.tone ?? "info"` — faithfully mirroring `createBadge` **as it stood
+during the run**. Both green on `npm test` (3 files / 7 tests) and
+`npm run typecheck`.
+
+> `createBadge` no longer looks like that: the coalescing default was later
+> replaced with a comparison against the allowed literals in all three widgets,
+> for the reason the copying illustrates — `create()` erases props to
+> `Record<string, unknown>`, so `??` passes any non-nullish value straight into
+> the attribute. What the run establishes is that both A and B copied the seeded
+> widget faithfully, and that is unaffected by what the seed later became.
 
 | Aspect | A (skill available) | B (skill removed) |
 |---|---|---|

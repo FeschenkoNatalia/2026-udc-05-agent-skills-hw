@@ -62,10 +62,14 @@ Six, plus the unregistered `tooltip` case = 7. The count is asserted in
 `check_widgets.py` (`len(rendered) != 7`), so adding or removing a case in
 `harness.html` means updating that number too.
 
-**What this does not cover:** every case passes `tone`/`size` explicitly, so the
-default branches (`props.tone ?? "info"`, `props.size ?? "md"`) are never
-exercised in the browser, and the `error` tone and `md` size do not appear. The
-run proves the explicit paths render, not the defaults.
+**What this does not cover:** every case passes `tone`/`size` explicitly *and*
+as a valid literal, so no factory ever takes its fallback branch. Each narrows
+at runtime by comparing against the allowed values rather than coalescing a
+nullish one — `props.tone === "warn" || props.tone === "error" ? props.tone :
+"info"` in `badge` and `alert`, the same shape ending `: "md"` in `spinner` —
+so the browser run exercises neither an omitted prop nor a rejected value, and
+the `error` tone and `md` size never appear. The run proves the valid explicit
+paths render, not the fallbacks.
 
 ## Adaptations needed
 
